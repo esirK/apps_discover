@@ -1,2 +1,6 @@
 #!/usr/bin/python3
-print("Hello World")
+import subprocess
+result = subprocess.run(['dokku', 'apps:list'], stdout=subprocess.PIPE, text=True).stdout
+apps = [app for app in result.split('\n') if app][1:] # Ignore the first line since it's the "=====> My Apps"
+
+print(apps)
