@@ -1,0 +1,4 @@
+[plugin]
+description = "dokku plugin to auto discover apps running in an ec2 instance"
+version = "0.1.0"
+[plugin.config]
