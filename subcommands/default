@@ -7,9 +7,20 @@ apps = [app for app in result.split('\n') if app][1:] # Ignore the first line si
 
 url = 'http://e9bd79cad80f.ngrok.io/apps' # Set destination URL here
 apps = ['actnow', 'nigerianstat-cms', 'nigerianstat-ui']
-post_fields = {'apps': apps}     # Set POST fields here
+
+cfa_apps = {
+
+}
+# For every app, get the DOMAINS
+for app in apps:
+    result = subprocess.run(['dokku', 'domains:report', app], stdout=subprocess.PIPE, text=True).stdout
+    domains = [domain for domain in result.split('\n') if result][1:][1].split(' ')[-1] # Ignore the first line
+    cfa_apps[app] = domains
+
+
+post_fields = {'apps': cfa_apps}     # Set POST fields here
 
 request = Request(url, urlencode(post_fields).encode())
 request.add_header('Content-Type', 'application/json')
 json = urlopen(request).read().decode()
-print(apps)
+print(cfa_apps)
