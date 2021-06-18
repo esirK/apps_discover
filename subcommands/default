@@ -1,6 +1,15 @@
 #!/usr/bin/python3
+from urllib.parse import urlencode
+from urllib.request import Request, urlopen
 import subprocess
 result = subprocess.run(['dokku', 'apps:list'], stdout=subprocess.PIPE, text=True).stdout
 apps = [app for app in result.split('\n') if app][1:] # Ignore the first line since it's the "=====> My Apps"
 
+url = 'http://e9bd79cad80f.ngrok.io/apps' # Set destination URL here
+apps = ['actnow', 'nigerianstat-cms', 'nigerianstat-ui']
+post_fields = {'apps': apps}     # Set POST fields here
+
+request = Request(url, urlencode(post_fields).encode())
+request.add_header('Content-Type', 'application/json')
+json = urlopen(request).read().decode()
 print(apps)
