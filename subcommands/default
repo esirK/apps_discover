@@ -2,19 +2,18 @@
 from urllib.parse import urlencode
 from urllib.request import Request, urlopen
 import subprocess
-result = subprocess.run(['dokku', 'apps:list'], stdout=subprocess.PIPE, text=True).stdout
+result = subprocess.run(['dokku', 'apps:list'], stdout=subprocess.PIPE).stdout.decode()
 apps = [app for app in result.split('\n') if app][1:] # Ignore the first line since it's the "=====> My Apps"
 
 url = 'http://e9bd79cad80f.ngrok.io/apps' # Set destination URL here
-apps = ['actnow', 'nigerianstat-cms', 'nigerianstat-ui']
 
 cfa_apps = {}
 
 # For every app, get the DOMAINS
 for app in apps:
-    result = subprocess.run(['dokku', 'domains:report', app], stdout=subprocess.PIPE, text=True).stdout
+    result = subprocess.run(['dokku', 'domains:report', app], stdout=subprocess.PIPE).stdout.decode()
     domains = [domain for domain in result.split('\n') if result][1:][1].split(' ')[-1] # Ignore the first line
-    instance_id = subprocess.run(['curl', '-s', 'http://169.254.169.254/latest/meta-data/instance-id'], stdout=subprocess.PIPE, text=True).stdout
+    instance_id = subprocess.run(['curl', '-s', 'http://169.254.169.254/latest/meta-data/instance-id'], stdout=subprocess.PIPE).stdout.decode()
     cfa_apps[app] = {'domains': domains, 'instance_id': instance_id}
 
 post_fields = {'apps': cfa_apps}     # Set POST fields here
