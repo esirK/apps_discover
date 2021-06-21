@@ -5,7 +5,7 @@ import subprocess
 result = subprocess.run(['dokku', 'apps:list'], stdout=subprocess.PIPE).stdout.decode()
 apps = [app for app in result.split('\n') if app][1:] # Ignore the first line since it's the "=====> My Apps"
 
-url = 'http://e9bd79cad80f.ngrok.io/apps' # Set destination URL here
+url = 'http://ceafc68ce569.ngrok.io/apps' # Set destination URL here
 
 cfa_apps = {}
 
